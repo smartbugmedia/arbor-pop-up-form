@@ -3,10 +3,12 @@
   "external_js": [],
   "global": false,
   "help_text": "",
-  "host_template_types": ["PAGE"],
-  "icon": "vuejs",
+  "host_template_types": [
+    "PAGE",
+    "BLOG_POST",
+    "BLOG_LISTING"
+  ],
   "js_assets": [],
-  "label": "Vue app boilerplate",
   "other_assets": [],
   "smart_type": "NOT_SMART",
   "tags": [],

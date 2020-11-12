@@ -1,0 +1,83 @@
+{{ require_css(get_asset_url('../../main.css')) }}
+{{ require_js('//js.hsforms.net/forms/v2.js') }}
+{{ require_js(get_asset_url('../../main.js'), 'footer') }}
+
+{% require_js %}
+<!--[if lte IE 8]>
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2-legacy.js"></script>
+<![endif]-->
+{% end_require_js %}
+{%- set instance_id = name %}
+
+{% set potential_modals = [] %}
+{% for modal in module.pop_up_form_options %}
+    {% if modal.list_id in request_contact.list_memberships %}
+      {% do potential_modals.append(modal) %}
+    {% endif %}
+{% endfor %}
+{% if !potential_modals|length %}
+  {% for modal in module.pop_up_form_options %}
+      {% if modal.default %}
+        {% do potential_modals.append(modal) %}
+      {% endif %}
+  {% endfor %}
+{% endif %}
+
+<div class="cms-vue-boilerplate">
+  <script type="application/json"
+    data-module-instance="{{ instance_id }}"
+    data-portal-id="{{ portalId }}">
+    {
+      "moduleData" : {{ module|tojson }},
+      "contactData" : {{contact|tojson}},
+      "potentialModals" : {{potential_modals|tojson}}
+    }
+  </script>
+
+  <div id="App--{{ instance_id }}"></div>
+</div>
+
+{#
+<!--[if lte IE 8]>
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2-legacy.js"></script>
+<![endif]-->
+<script charset="utf-8" type="text/javascript" src="//js.hsforms.net/forms/v2.js"></script>
+<script>
+  hbspt.forms.create({
+    portalId: "747395",
+    formId: "370912fb-43f8-4709-bd65-88b397416b34"
+  });
+</script>
+#}
+{% require_js position="head" %}
+  <script>
+  var $vm;
+  function addVueVar() {
+    $vm = document.querySelector('.cms-vue-boilerplate .cms-vue-boilerplate-container').__vue__;
+  }
+  </script>
+{% end_require_js%}
+{% require_js  %}
+  <script>
+    function swapLabels(formID) {
+      var modalFormFields = document.querySelectorAll('#modal__form form[data-form-id="' + formID + '"] .hs-form-field');
+      modalFormFields.forEach(field => {
+        if (field.classList.contains("hs-fieldtype-text")) {
+          var label = field.querySelector("label span");
+          var input = field.querySelector("input");
+          input.placeholder = label.innerHTML;
+        } else if (field.classList.contains("hs-fieldtype-select")) {
+          var label = field.querySelector("label span");
+          var input = field.querySelector("select option:first-child");
+          input.innerHTML= label.innerHTML;
+        }
+      });
+    }
+    window.addEventListener('message', event => {
+      if(event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormReady') {
+          console.log(event.data.id);
+          swapLabels(event.data.id);
+      }
+    });
+  </script>
+{% end_require_js%}

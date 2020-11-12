@@ -1,57 +1,72 @@
 <template>
   <div class="cms-vue-boilerplate-container">
-    <div class="spinning-logo-container">
-      <SpinningLogo :src="vueLogo" alt="Vue logo" />
-      <SpinningLogo :src="sprocketLogo" alt="sprocket logo" isSprocket="true" />
-    </div>
-    <p>Edit <code>src/App.js</code> and save to reload.</p>
-    <Card :initialClickCount="moduleData.initial_count" />
+    <transition name="fade">
+      <Modal :modalData="finalModal" @close="toggleModal" ref="modal" v-if="showModal" />
+    </transition>
   </div>
 </template>
 
 <script>
-import Card from '@/components/Card.vue';
-import SpinningLogo from '@/components/SpinningLogo.vue';
-import sprocketLogo from '@/assets/sprocket.svg';
-import vueLogo from '@/assets/vue.svg';
+import Modal from '@/components/Modal.vue';
 
 export default {
   name: 'App',
   props: ['moduleData'],
   data: function() {
     return {
-      sprocketLogo,
-      vueLogo,
+      showModal: false,
+      potentialModals: this.moduleData.potentialModals
     };
   },
+  computed: {
+    finalModal() {
+      return this.potentialModals[Math.floor(Math.random() * this.potentialModals.length)];
+    }
+  },
+  methods: {
+    refreshCookie() {
+      if (!localStorage.getItem('modal_closed')) {
+        this.showModal = true;
+      }
+    },
+    toggleModal(e) {
+      this.showModal = !this.showModal;
+    }
+  },
   created: function() {
-    // eslint-disable-next-line no-console
-    console.log(
-      'all of your data typically accessed via the "module" keyword in HubL is available as JSON here!',
-      this.moduleData,
-    );
+    console.log(this.finalModal);
+    if (this.finalModal.trigger == "time") {
+      let seconds = this.finalModal.number_of_seconds * 1000;
+      setTimeout(() => {
+        this.toggleModal();
+      }, seconds);
+    } else {
+      console.log("exit intent");
+      document.addEventListener('mouseout', e => {
+        // if (!e.toElement && !e.relatedTarget && !localStorage.getItem('modal_closed')) {
+        //   console.log("This should have fired");
+        //   this.toggleModal();
+        //   localStorage.setItem('modal_closed', 'true');
+        // }
+        if (!e.toElement && !e.relatedTarget) {
+          console.log("This should have fired");
+          this.toggleModal();
+          localStorage.setItem('modal_closed', 'true');
+        }
+      });
+    }
   },
   components: {
-    Card,
-    SpinningLogo,
+    Modal
   },
 };
 </script>
 
 <style lang="scss">
-.cms-vue-boilerplate-container {
-  text-align: center;
-  background-color: #282c34;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  padding: 1rem 0 1rem 0;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
 }
-
-.spinning-logo__container {
-  flex-direction: row;
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>

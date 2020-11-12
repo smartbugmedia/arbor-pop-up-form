@@ -89,6 +89,10 @@ const hubspotConfig = ({ portal, autoupload } = {}) => {
             from: 'src/modules',
             to: 'modules',
           },
+          {
+            from: 'src/templates',
+            to: 'templates',
+          },
         ],
       }),
       new VueLoaderPlugin(),
