@@ -7,10 +7,23 @@
   "occurrence": {
     "min": null,
     "max": null,
-    "sorting_label_field": null,
+    "sorting_label_field": "variant_name",
     "default": null
   },
   "children": [
+    {
+    "name": "variant_name",
+    "label": "Variant Name",
+    "required": false,
+    "locked": false,
+    "validation_regex": "",
+    "allow_new_line": false,
+    "show_emoji_picker": false,
+    "type": "text",
+    "placeholder": "",
+    "inline_help_text": "",
+    "help_text": "",
+    "default": "Version One" },
     {
     "name": "default",
     "label": "Is this a default instance?",
@@ -88,8 +101,7 @@
     [
       "border",
       "Border Only"
-    ],
-    [
+    ], [
       "background_image",
       "Background Image"
     ]
@@ -97,6 +109,15 @@
     "type": "choice",
     "placeholder": "",
     "default": "border"},
+    {
+    "name": "use_form",
+    "label": "Use Form?",
+    "required": false,
+    "locked": false,
+    "type": "boolean",
+    "inline_help_text": "",
+    "help_text": "",
+    "default": true },
     {
     "name": "background_image",
     "label": "Background Image",

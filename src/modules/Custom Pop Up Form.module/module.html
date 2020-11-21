@@ -75,9 +75,36 @@
     }
     window.addEventListener('message', event => {
       if(event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormReady') {
-          console.log(event.data.id);
+          //console.log(event.data.id);
           swapLabels(event.data.id);
       }
     });
   </script>
 {% end_require_js%}
+
+{# require_js %}
+  <script>
+  {# $('select').on('selectric-init', function(event, element, selectric) {
+    console.log("start");
+    console.log(event);
+    console.log(element);
+    console.log("end");
+  });
+  const selects = document.querySelectorAll(".modal__body select");
+  function callback(mutationsList, observer) {
+    console.log('Mutations:', mutationsList)
+    console.log('Observer:', observer)
+    mutationsList.forEach(mutation => {
+        if (mutation.attributeName === 'class') {
+            alert('Ch-ch-ch-changes!')
+        }
+    })
+  }
+
+  const mutationObserver = new MutationObserver(callback);
+  selects.forEach(select => {
+    mutationObserver.observe(select, { attributes: true });
+  });
+
+  </script>
+{% end_require_js #}

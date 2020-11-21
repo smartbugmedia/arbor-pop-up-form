@@ -1,5 +1,5 @@
 <template>
-  <div class="cms-vue-boilerplate-container">
+  <div class="cms-vue-boilerplate-container cms-vue-boilerplate-container--custom-pop-up">
     <transition name="fade">
       <Modal :modalData="finalModal" @close="toggleModal" ref="modal" v-if="showModal" />
     </transition>
@@ -68,5 +68,13 @@ export default {
 }
 .fade-enter, .fade-leave-to {
   opacity: 0;
+}
+.cms-vue-boilerplate-container--custom-pop-up {
+  display: none;
+}
+@media screen and (min-width: 768px) {
+  .cms-vue-boilerplate-container--custom-pop-up {
+    display: block;
+  }
 }
 </style>

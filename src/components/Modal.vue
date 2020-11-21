@@ -8,18 +8,18 @@
         <img v-if="modalData.background_image.src" loading="lazy" :src="modalData.background_image.src" :alt="modalData.background_image.alt">
         <img :src="background" loading="lazy" aria-hidden alt="Arbor">
       </div>
-      <div class="modal__slide modal__slide--1">
+      <div :class='this.modalData.use_form ? "modal__slide modal__slide--1" : "modal__slide modal__slide--1 modal__slide--single"'>
         <div class="modal__slide__wrapper">
           <div class="modal__slide__text" v-html="this.modalData.slide_1_content"></div>
-          <button @click="nextSlide">{{this.modalData.next_button_text}}</button>
+          <button v-if="this.modalData.use_form" @click="nextSlide">{{this.modalData.next_button_text}}</button>
         </div>
       </div>
-      <div class="modal__slide modal__slide--2">
+      <div v-if="this.modalData.use_form" class="modal__slide modal__slide--2">
         <div class="modal__slide__wrapper">
           <div id="modal__form"></div>
         </div>
         </div>
-      <div class="modal__slide modal__slide--3">
+      <div v-if="this.modalData.use_form" class="modal__slide modal__slide--3">
         <div class="modal__slide__wrapper">
             <div class="modal__slide__text" v-html="this.modalData.slide_3_content"></div>
         </div>
@@ -53,11 +53,33 @@ export default {
         target: '#modal__form',
         // add formId
         formId: this.modalData.form.form_id,
-        onFormReady: function() {
-          setTimeout(function() {
-            $(".modal__body select").selectric('destroy');
-            console.log("should be gone SELECTRIC")
-          }, 2000);
+        onFormReady: function($form) {
+          setTimeout(() => {
+            var selectCheck = $('.modal__body .selectric');
+            if (selectCheck) {
+              // console.log("selectric found");
+              $('.modal__body select').selectric("destroy");
+            }
+          }, 500);
+          // console.log($form[0].dataset);
+          var formID = $form[0].dataset.formId;
+          // console.log('document.querySelector(form[data-form-id="\'' + formID + '\'"]\')');
+          var generatedForm = document.querySelector('form[data-form-id="' + formID + '"]');
+          // console.log(generatedForm);
+          var selects = generatedForm.querySelectorAll('select');
+          // console.log(selects);
+          selects.forEach( select => {
+            select.addEventListener("change", e => {
+              // console.log(e);
+              swapLabels(formID);
+            })
+          })
+          // window.addEventListener('message', event => {
+          //   if(event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormReady') {
+          //       //console.log(event.data.id);
+          //       swapLabels(event.data.id);
+          //   }
+          // });
         },
         onFormSubmit: function($form) {
           $vm.$refs.modal.nextSlide();
@@ -66,7 +88,21 @@ export default {
   },
   mounted: function() {
     addVueVar();
-    $(".modal__body select").selectric('destroy');
+    // $(".modal__body select").selectric('destroy');
+    function swapLabels(formID) {
+      var modalFormFields = document.querySelectorAll('#modal__form form[data-form-id="' + formID + '"] .hs-form-field');
+      modalFormFields.forEach(field => {
+        if (field.classList.contains("hs-fieldtype-text")) {
+          var label = field.querySelector("label span");
+          var input = field.querySelector("input");
+          input.placeholder = label.innerHTML;
+        } else if (field.classList.contains("hs-fieldtype-select")) {
+          var label = field.querySelector("label span");
+          var input = field.querySelector("select option:first-child");
+          input.innerHTML= label.innerHTML;
+        }
+      });
+    }
   },
   computed: {
     // currentSlideClass() {
@@ -74,13 +110,18 @@ export default {
     //   return "modal__body modal__body--slide-" + this.currentSlide + "modal__body--bg-" + bgImage;
     // },
     currentSlideClass() {
-      return "modal__body modal__body--slide-" + this.currentSlide;
+      return "modal__body modal__body--slide-" + this.currentSlide + " modal__body--style--" + this.modalData.pop_up_style;
     },
   },
   methods: {
     nextSlide() {
       this.currentSlide += 1;
-      $(".modal__body select").selectric('destroy');
+      // $(".modal__body select").selectric('destroy');
+      var selectCheck = $('.modal__body .selectric');
+      if (selectCheck) {
+        console.log("selectric found");
+        $('.modal__body select').selectric("destroy");
+      }
     },
     triggerClose() {
       this.$emit("close", true);
@@ -185,6 +226,22 @@ export default {
         }
       }
     }
+    &--style {
+      &--border {
+        max-width: 500px;
+        .modal__bg-border img {
+          display: none;
+          & + img {
+            display: block;
+            transform: none;
+          }
+        }
+        .modal__slide__wrapper {
+          margin-right: auto;
+          transform: translateX(1.6rem);
+        }
+      }
+    }
   }
   &__slide {
     padding: 27px 2.8rem 39px;
@@ -196,6 +253,9 @@ export default {
     &__wrapper {
       max-width: 344px;
       margin-left: auto;
+    }
+    &--single {
+      width: 500px;
     }
   }
   &__close {
@@ -265,6 +325,7 @@ export default {
 #modal__form form select {
     appearance: none;
     padding: 0 2ch;
+    background: #fff;
 }
 
 #modal__form form .hs-fieldtype-select .input {
@@ -281,5 +342,23 @@ export default {
     border-left: 1ch solid transparent;
     border-right: 1ch solid transparent;
     border-top: 1ch solid #01537e;
+}
+#modal__form .selectric-wrapper.selectric-hs-input {
+    height: 39px !important;
+}
+#modal__form form label.hs-error-msg {
+    display: block;
+    margin: 0.8em 0 0;
+    color: #ec0d0d;
+}
+@media screen and (max-width: 1100px) {
+  .modal__body button, .modal__body input[type="submit"] {
+    font-size: 1.6rem;
+    margin-top: 0.6em;
+}
+#modal__form form .hs-fieldtype-booleancheckbox ul label.hs-form-booleancheckbox-display>input {
+  padding: 2px !important;
+  background: #fff;
+}
 }
 </style>

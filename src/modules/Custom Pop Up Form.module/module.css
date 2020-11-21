@@ -31,7 +31,7 @@
     display: none;
 }
 
-#modal__form form fieldset > * {
+#modal__form form fieldset > *, #modal__form form fieldset > .hs-dependent-field > * {
     margin-bottom: 0.666666rem;
 }
 
