@@ -52,3 +52,9 @@
     padding: 0.889em 2.253em;
     border: none;
 }
+.modal__body--style--background_image .modal__slide--single {
+    width: 600px;
+}
+.modal__body--style--background_image .modal__bg-border img+img {
+    transform: translateX(-12px);
+}

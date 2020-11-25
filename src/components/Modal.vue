@@ -48,43 +48,45 @@ export default {
     };
   },
   created: function() {
-    hbspt.forms.create({ 
-        portalId: '747395',
-        target: '#modal__form',
-        // add formId
-        formId: this.modalData.form.form_id,
-        onFormReady: function($form) {
-          setTimeout(() => {
-            var selectCheck = $('.modal__body .selectric');
-            if (selectCheck) {
-              // console.log("selectric found");
-              $('.modal__body select').selectric("destroy");
-            }
-          }, 500);
-          // console.log($form[0].dataset);
-          var formID = $form[0].dataset.formId;
-          // console.log('document.querySelector(form[data-form-id="\'' + formID + '\'"]\')');
-          var generatedForm = document.querySelector('form[data-form-id="' + formID + '"]');
-          // console.log(generatedForm);
-          var selects = generatedForm.querySelectorAll('select');
-          // console.log(selects);
-          selects.forEach( select => {
-            select.addEventListener("change", e => {
-              // console.log(e);
-              swapLabels(formID);
+    if (this.modalData.form.form_id) {
+      hbspt.forms.create({ 
+          portalId: '747395',
+          target: '#modal__form',
+          // add formId
+          formId: this.modalData.form.form_id,
+          onFormReady: function($form) {
+            setTimeout(() => {
+              var selectCheck = $('.modal__body .selectric');
+              if (selectCheck) {
+                // console.log("selectric found");
+                $('.modal__body select').selectric("destroy");
+              }
+            }, 500);
+            // console.log($form[0].dataset);
+            var formID = $form[0].dataset.formId;
+            // console.log('document.querySelector(form[data-form-id="\'' + formID + '\'"]\')');
+            var generatedForm = document.querySelector('form[data-form-id="' + formID + '"]');
+            // console.log(generatedForm);
+            var selects = generatedForm.querySelectorAll('select');
+            // console.log(selects);
+            selects.forEach( select => {
+              select.addEventListener("change", e => {
+                // console.log(e);
+                swapLabels(formID);
+              })
             })
-          })
-          // window.addEventListener('message', event => {
-          //   if(event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormReady') {
-          //       //console.log(event.data.id);
-          //       swapLabels(event.data.id);
-          //   }
-          // });
-        },
-        onFormSubmit: function($form) {
-          $vm.$refs.modal.nextSlide();
-        } 
-    });
+            // window.addEventListener('message', event => {
+            //   if(event.data.type === 'hsFormCallback' && event.data.eventName === 'onFormReady') {
+            //       //console.log(event.data.id);
+            //       swapLabels(event.data.id);
+            //   }
+            // });
+          },
+          onFormSubmit: function($form) {
+            $vm.$refs.modal.nextSlide();
+          } 
+      });
+    }
   },
   mounted: function() {
     addVueVar();
@@ -102,6 +104,70 @@ export default {
           input.innerHTML= label.innerHTML;
         }
       });
+    };
+    if (this.modalData.slide_1_content.indexOf('data-cta') !== -1) {
+      const ctas = document.querySelectorAll('*[data-cta]');
+      ctas.forEach(cta => {
+        const ctaID = cta.dataset.cta;
+        // console.log(`CTA ID IS ${ctaID}`);
+        console.log(cta.classList);
+        cta.classList.add("hs-cta-wrapper");
+        cta.setAttribute("id", `hs-cta-wrapper-${ctaID}`);
+        
+        const nodeSpan = document.createElement('span');
+        nodeSpan.classList.add("hs-cta-node", `hs-cta-${ctaID}`);
+        nodeSpan.setAttribute("id", `hs-cta-${ctaID}`);
+
+        const linkWrap = document.createElement('a');
+        linkWrap.setAttribute("href", `https://cta-redirect.hubspot.com/cta/redirect/${ctaID}`);
+        linkWrap.setAttribute("target", "_blank");
+
+        const imgPlaceholder = document.createElement('img');
+        imgPlaceholder.classList.add("hs-cta-img");
+        imgPlaceholder.setAttribute("id", `hs-cta-img-${ctaID}`);
+        imgPlaceholder.setAttribute("src", `https://no-cache.hubspot.com/cta/default/747395/${ctaID}.png`);
+
+        linkWrap.appendChild(imgPlaceholder);
+        nodeSpan.appendChild(linkWrap);
+        cta.appendChild(nodeSpan);
+
+        setTimeout(() => {
+          hbspt.cta.load(747395, `${ctaID}`, {});
+        }, 100);
+
+      })
+    };
+    if (this.modalData.slide_3_content.indexOf('data-cta') !== -1) {
+      const ctas = document.querySelectorAll('*[data-cta]');
+      ctas.forEach(cta => {
+        const ctaID = cta.dataset.cta;
+        // console.log(`CTA ID IS ${ctaID}`);
+        console.log(cta.classList);
+        cta.classList.add("hs-cta-wrapper");
+        cta.setAttribute("id", `hs-cta-wrapper-${ctaID}`);
+        
+        const nodeSpan = document.createElement('span');
+        nodeSpan.classList.add("hs-cta-node", `hs-cta-${ctaID}`);
+        nodeSpan.setAttribute("id", `hs-cta-${ctaID}`);
+
+        const linkWrap = document.createElement('a');
+        linkWrap.setAttribute("href", `https://cta-redirect.hubspot.com/cta/redirect/${ctaID}`);
+        linkWrap.setAttribute("target", "_blank");
+
+        const imgPlaceholder = document.createElement('img');
+        imgPlaceholder.classList.add("hs-cta-img");
+        imgPlaceholder.setAttribute("id", `hs-cta-img-${ctaID}`);
+        imgPlaceholder.setAttribute("src", `https://no-cache.hubspot.com/cta/default/747395/${ctaID}.png`);
+
+        linkWrap.appendChild(imgPlaceholder);
+        nodeSpan.appendChild(linkWrap);
+        cta.appendChild(nodeSpan);
+
+        setTimeout(() => {
+          hbspt.cta.load(747395, `${ctaID}`, {});
+        }, 100);
+
+      })
     }
   },
   computed: {

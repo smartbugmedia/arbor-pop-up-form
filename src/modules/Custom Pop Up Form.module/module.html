@@ -22,15 +22,28 @@
       {% endif %}
   {% endfor %}
 {% endif %}
+{% for modal in potential_modals %}
+  {% if "cta" in modal.slide_1_content %}
+    {% set newContent = modal.slide_1_content|replace('{{cta(\'', '<span data-cta="')|replace('\')}}', '"></span>') %}
+    {% do modal.update({'slide_1_content' : newContent}) %}
+    {#modal|pprint#}
+  {% endif %}
+  {% if "cta" in modal.slide_3_content %}
+    {% set newContent = modal.slide_3_content|replace('{{cta(\'', '<span data-cta="')|replace('\')}}', '"></span>') %}
+    {% do modal.update({'slide_3_content' : newContent}) %}
+    {#modal|pprint#}
+  {% endif %}
+  {# do modal.update({'slide_1_content', modal.slide_1_content|escapejson}) #}
+{% endfor %}
 
 <div class="cms-vue-boilerplate">
   <script type="application/json"
     data-module-instance="{{ instance_id }}"
     data-portal-id="{{ portalId }}">
     {
-      "moduleData" : {{ module|tojson }},
-      "contactData" : {{contact|tojson}},
-      "potentialModals" : {{potential_modals|tojson}}
+    "potentialModals" : {{potential_modals|tojson}},
+    "moduleData" : {{ module|tojson }},
+    "contactData" : {{contact|tojson}}
     }
   </script>
 
@@ -80,6 +93,7 @@
       }
     });
   </script>
+  <script charset="utf-8" src="https://js.hscta.net/cta/current.js"></script>
 {% end_require_js%}
 
 {# require_js %}
