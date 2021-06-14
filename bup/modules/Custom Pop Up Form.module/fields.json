@@ -1,0 +1,207 @@
+[ {
+  "id" : "pop_up_form_options",
+  "name" : "pop_up_form_options",
+  "label" : "Pop Up Form Options",
+  "help_text" : "",
+  "inline_help_text" : "",
+  "required" : false,
+  "locked" : false,
+  "occurrence" : {
+    "min" : null,
+    "max" : null,
+    "sorting_label_field" : "variant_name",
+    "default" : null
+  },
+  "children" : [ {
+    "id" : "pop_up_form_options.variant_name",
+    "name" : "variant_name",
+    "label" : "Variant Name",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "placeholder" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text",
+    "default" : "Version One"
+  }, {
+    "id" : "pop_up_form_options.default",
+    "name" : "default",
+    "label" : "Is this a default instance?",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "display" : "checkbox",
+    "type" : "boolean",
+    "default" : false
+  }, {
+    "id" : "pop_up_form_options.long_form",
+    "name" : "long_form",
+    "label" : "Long Form?",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "display" : "checkbox",
+    "type" : "boolean",
+    "default" : false
+  }, {
+    "id" : "pop_up_form_options.show_mobile",
+    "name" : "show_mobile",
+    "label" : "Show on Mobile?",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "display" : "checkbox",
+    "type" : "boolean",
+    "default" : false
+  }, {
+    "id" : "pop_up_form_options.list_id",
+    "name" : "list_id",
+    "label" : "List ID",
+    "help_text" : "",
+    "inline_help_text" : "If a contact is a member of this list, they will be shown this version of the pop up form. If the contact is a member of multiple lists, they will be shown one at random.",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "placeholder" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text",
+    "default" : "123"
+  }, {
+    "id" : "trigger",
+    "name" : "trigger",
+    "label" : "Trigger",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "display" : "select",
+    "placeholder" : "",
+    "choices" : [ [ "exit_intent", "Exit Intent" ], [ "time", "Time Elapsed" ] ],
+    "type" : "choice",
+    "default" : "time"
+  }, {
+    "id" : "pop_up_form_options.number_of_seconds",
+    "name" : "number_of_seconds",
+    "label" : "Number of Seconds",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "visibility" : {
+      "controlling_field" : "trigger",
+      "controlling_value_regex" : "time",
+      "operator" : "EQUAL",
+      "access" : null,
+      "hidden_subfields" : null
+    },
+    "display" : "text",
+    "step" : 1,
+    "type" : "number",
+    "default" : 7
+  }, {
+    "id" : "pop_up_style",
+    "name" : "pop_up_style",
+    "label" : "Pop Up Design Style",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "display" : "select",
+    "placeholder" : "",
+    "choices" : [ [ "border", "Border Only" ], [ "background_image", "Background Image" ] ],
+    "type" : "choice",
+    "default" : "border"
+  }, {
+    "id" : "pop_up_form_options.use_form",
+    "name" : "use_form",
+    "label" : "Use Form?",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "display" : "checkbox",
+    "type" : "boolean",
+    "default" : true
+  }, {
+    "id" : "pop_up_form_options.background_image",
+    "name" : "background_image",
+    "label" : "Background Image",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "visibility" : {
+      "controlling_field" : "pop_up_style",
+      "controlling_value_regex" : "background_image",
+      "operator" : "EQUAL",
+      "access" : null,
+      "hidden_subfields" : null
+    },
+    "responsive" : true,
+    "resizable" : true,
+    "show_loading" : false,
+    "type" : "image",
+    "default" : {
+      "src" : "/cms-vue-boilerplate/assets/OurStory.jpg",
+      "alt" : null
+    }
+  }, {
+    "id" : "pop_up_form_options.slide_1_content",
+    "name" : "slide_1_content",
+    "label" : "First Slide (Text) Content",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "type" : "richtext",
+    "default" : "<h2>Lorem Ipsum Dolor Sit Amet</h2><p>Donec sed odio dui. Curabitur blandit tempus porttitor. Lorem ipsum dolor. Donec sed odio dui. Curabitur blandit tempus porttitor.</p>"
+  }, {
+    "id" : "pop_up_form_options.next_button_text",
+    "name" : "next_button_text",
+    "label" : "First Slide Button Text",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "validation_regex" : "",
+    "placeholder" : "",
+    "allow_new_line" : false,
+    "show_emoji_picker" : false,
+    "type" : "text",
+    "default" : "Lorem Ipsum CTA"
+  }, {
+    "id" : "pop_up_form_options.form",
+    "name" : "form",
+    "label" : "Form",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "type" : "form",
+    "default" : {
+      "response_type" : "inline",
+      "message" : ""
+    }
+  }, {
+    "id" : "pop_up_form_options.slide_3_content",
+    "name" : "slide_3_content",
+    "label" : "Third Slide (Thank You) Content",
+    "help_text" : "",
+    "inline_help_text" : "",
+    "required" : false,
+    "locked" : false,
+    "type" : "richtext",
+    "default" : "<h2>Thank You</h2><p>Donec sed odio dui. Curabitur blandit tempus porttitor. Lorem ipsum dolor. Donec sed odio dui. Curabitur blandit tempus porttitor.</p>"
+  } ],
+  "tab" : "CONTENT",
+  "expanded" : false,
+  "type" : "group",
+  "default" : { }
+} ]

@@ -22,12 +22,25 @@
       {% endif %}
   {% endfor %}
 {% endif %}
+{% for modal in module.pop_up_form_options %}
+  {% if "cta" in modal.slide_1_content %}
+    {% set newContent = modal.slide_1_content|replace('{{cta(\'', '<span data-cta="')|replace('\')}}', '"></span>') %}
+    {% do modal.update({'slide_1_content' : newContent}) %}
+    {#modal|pprint#}
+  {% endif %}
+  {% if "cta" in modal.slide_3_content %}
+    {% set newContent = modal.slide_3_content|replace('{{cta(\'', '<span data-cta="')|replace('\')}}', '"></span>') %}
+    {% do modal.update({'slide_3_content' : newContent}) %}
+    {#modal|pprint#}
+  {% endif %}
+  {# do modal.update({'slide_1_content', modal.slide_1_content|escapejson}) #}
+{% endfor %}
 {% for modal in potential_modals %}
   {% if "cta" in modal.slide_1_content %}
     {% set newContent = modal.slide_1_content|replace('{{cta(\'', '<span data-cta="')|replace('\')}}', '"></span>') %}
     {% do modal.update({'slide_1_content' : newContent}) %}
     {#modal|pprint#}
-  {% endif %}  
+  {% endif %}
   {% if "cta" in modal.slide_3_content %}
     {% set newContent = modal.slide_3_content|replace('{{cta(\'', '<span data-cta="')|replace('\')}}', '"></span>') %}
     {% do modal.update({'slide_3_content' : newContent}) %}
@@ -81,8 +94,10 @@
           input.placeholder = label.innerHTML;
         } else if (field.classList.contains("hs-fieldtype-select")) {
           var label = field.querySelector("label span");
-          var input = field.querySelector("select option:first-child");
-          input.innerHTML= label.innerHTML;
+          var firstOption = field.querySelector("select option:first-child");
+          if (firstOption) {
+            firstOption.innerHTML= label.innerHTML;
+          }
         }
       });
     }

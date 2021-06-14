@@ -79,27 +79,3 @@ body #modal__form form.hs-form fieldset .hs-form-field {
 #modal__form fieldset.form-columns-2 {
     display: flex;
 }
-
-.modal__body--slide-1.modal__body--tour {
-    max-width: calc(100vw - 6rem);
-}
-
-.modal__body--tour {
-    transition: max-width 0.3s ease;
-}
-
-.modal__body--tour .modal__slide__wrapper {
-    max-width: calc(100% - 4rem);
-    width: 100%;
-}
-
-.modal__bg .pano-wrapper {
-    transition: all 0.3s ease;
-}
-.modal__bg .modal__body--slide-1 .pano-wrapper {
-    height: 66vh;
-}
-
-.modal__bg .pano-fullwidth, .modal__bg .pano-fullwidth iframe {
-    height: 100%;
-}

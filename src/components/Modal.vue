@@ -11,12 +11,17 @@
       <div :class='this.modalData.use_form ? "modal__slide modal__slide--1" : "modal__slide modal__slide--1 modal__slide--single"'>
         <div class="modal__slide__wrapper">
           <div class="modal__slide__text" v-html="this.modalData.slide_1_content"></div>
-          <button v-if="this.modalData.use_form" @click="nextSlide">{{this.modalData.next_button_text}}</button>
+          <button v-if="this.modalData.use_form || this.modalData.show_tour" @click="nextSlide">{{this.modalData.next_button_text}}</button>
         </div>
       </div>
-      <div v-if="this.modalData.use_form" class="modal__slide modal__slide--2">
+      <div v-if="this.modalData.use_form || this.modalData.show_tour" class="modal__slide modal__slide--2">
         <div class="modal__slide__wrapper">
-          <div id="modal__form"></div>
+          <div v-if="this.modalData.use_form" id="modal__form"></div>
+          <div v-if="this.modalData.show_tour" id="modal__tour">
+            <div class="pano-wrapper" id="pano">
+              <div :id='"pano-" + modalData.panoskin_id' class="pano-fullwidth"></div>
+            </div>
+          </div>
         </div>
         </div>
       <div v-if="this.modalData.use_form" class="modal__slide modal__slide--3">
@@ -176,18 +181,39 @@ export default {
     //   return "modal__body modal__body--slide-" + this.currentSlide + "modal__body--bg-" + bgImage;
     // },
     currentSlideClass() {
-      return "modal__body modal__body--slide-" + this.currentSlide + " modal__body--style--" + this.modalData.pop_up_style;
+      let slideClass = "modal__body modal__body--slide-" + this.currentSlide + " modal__body--style--" + this.modalData.pop_up_style;
+      if (this.modalData.show_tour) {
+        slideClass += " modal__body--tour";
+      }
+      return slideClass;
     },
   },
   methods: {
     nextSlide() {
       this.currentSlide += 1;
       // $(".modal__body select").selectric('destroy');
-      var selectCheck = $('.modal__body .selectric');
-      if (selectCheck) {
+      var selectCheck = document.querySelectorAll('.modal__body .selectric');
+      if (selectCheck.length) {
         console.log("selectric found");
         $('.modal__body select').selectric("destroy");
       }
+      if (this.modalData.show_tour && this.currentSlide < 2) {
+        setTimeout( () => {
+          const script = document.createElement("script");
+          script.src = "//lcp360.cachefly.net/panoskin.min.js";
+          script.async = true;
+          script.onload = () => this.scriptLoaded();
+
+          document.body.appendChild(script);
+        }, 300);
+      }
+    },
+    scriptLoaded() {
+      const panoID = "pano-" + this.modalData.panoskin_id;
+      window.PANOSKIN.createViewer({
+        id: panoID,
+        tour: this.modalData.panoskin_id
+      });
     },
     triggerClose() {
       this.$emit("close", true);
